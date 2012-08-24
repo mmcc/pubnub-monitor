@@ -1,0 +1,106 @@
+%header
+	.content-wrap
+		.content
+			%h1 Monitor #{@channel}
+
+			.right
+				%button{:class => "send-test"} Send Test Message
+
+.content-wrap
+	%h2 New Messages
+	%ul#pn-messages.current
+
+	%h2 History
+	%ul#pn-messages.history
+
+%footer
+	.content-wrap
+		%p PubNub Monitor
+
+<div pub-key="#{@publish}" sub-key="#{@subscribe}" ssl="off" origin="pubsub.pubnub.com" id="pubnub"></div>
+%script{ :src => "http://cdn.pubnub.com/pubnub-3.1.min.js" }
+:javascript
+	var str;
+	function addMessage(msg) {
+		$('#pn-messages.current').prepend('<li><pre>' + msg + '</pre></li>');
+	}
+	function addHistoryMessage(msg) {
+		$('#pn-messages.history').prepend('<li><pre>' + msg + '</pre></li>');
+	}
+
+	// Thanks to Pumbaa80 for this: http://stackoverflow.com/a/7220510/804055
+	function syntaxHighlight(json) {
+		if (typeof json != 'string') {
+			json = JSON.stringify(json, undefined, 2);
+		}
+		json = json.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+		return json.replace(/("(\\u[a-zA-Z0-9]{4}|\\[^u]|[^\\"])*"(\s*:)?|\b(true|false|null)\b|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?)/g, function (match) {
+			var cls = 'number';
+			if (/^"/.test(match)) {
+				if (/:$/.test(match)) {
+					cls = 'key';
+				} else {
+					cls = 'string';
+				}
+			} else if (/true|false/.test(match)) {
+				cls = 'boolean';
+			} else if (/null/.test(match)) {
+				cls = 'null';
+			}
+			return '<span class="' + cls + '">' + match + '</span>';
+		});
+	}
+
+	$(function () {
+
+		// Send a test message
+		$('.send-test').click(function(event) {
+			event.preventDefault();
+			PUBNUB.publish({
+				channel: '#{@channel}',
+				message  : 'Test Message sent by PubNub Monitor',
+				callback : function(info) {
+					console.log(info);
+				}
+			});
+		});
+
+		// LISTEN FOR MESSAGES
+		PUBNUB.subscribe({
+			channel: "#{@channel}",
+
+			restore: false,
+
+			callback: function(msg) {
+				console.log("Message Recieved");
+				str = JSON.stringify(msg, undefined, 2);
+				addMessage(syntaxHighlight(msg));
+			},
+
+			disconnect: function() {        // LOST CONNECTION.
+				console.log("Disconnected from PubNub.");
+			},
+
+			reconnect: function() {        // CONNECTION RESTORED.
+				console.log("Reconnected to PubNub.");
+			},
+
+			connect: function() {        // CONNECTION ESTABLISHED.
+				console.log("Connected to PubNub.");
+			}
+		});
+
+		PUBNUB.history(
+			{
+				channel: '#{@channel}',
+				limit: 10
+			}, 
+			function(messages) {
+				$.each(messages, function(index, value) {
+					str = JSON.stringify(this, undefined, 2);
+					addHistoryMessage(syntaxHighlight(str));
+				});
+				console.log(messages);
+			}
+		);
+	});

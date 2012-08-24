@@ -1,0 +1,50 @@
+.clearfix {
+  zoom:1;
+  &:before, &:after {
+    content: "\0020";
+    display: block;
+    height: 0;
+    overflow: hidden;
+  }
+  &:after {
+    clear: both;
+  }
+}
+
+body {
+	background-color: #fff;
+	margin-top: 0;
+}
+
+header {
+	background-color: #ccc;
+	.content {
+		h1 { margin: 0; float: left; }
+		.send-test {
+			margin-top: 5px;
+		}
+		@extend .clearfix;
+	}
+}
+
+.right { float: right; }
+
+.content-wrap {
+	margin: 0 50px 20px 50px;
+}
+
+#pn-messages {
+	list-style: none;
+	margin-left: 0;
+	padding-left: 0;
+	li {
+		pre {
+			outline: 1px solid #ccc; padding: 5px; margin: 5px;
+			.string { color: green; }
+			.number { color: darkorange; }
+			.boolean { color: blue; }
+			.null { color: magenta; }
+			.key { color: red; }
+		}
+	}
+}
