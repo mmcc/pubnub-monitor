@@ -1,6 +1,7 @@
 # server.rb
 require 'sinatra'
 require 'haml'
+require 'sass'
 require 'yaml'
 
 # Load up the config file
