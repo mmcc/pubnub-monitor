@@ -1,3 +1,15 @@
+// Variables
+$blue: #00adef;
+$dark-gray: #333;
+
+// Mixins and some utilities (like clearfix)
+// Rounded Corners
+@mixin corners($radius) {
+	-webkit-border-radius: $radius;
+	-moz-border-radius: $radius;
+	border-radius: $radius;
+}
+// Use clearfix with "@extend .clearfix;"
 .clearfix {
   zoom:1;
   &:before, &:after {
@@ -17,11 +29,17 @@ body {
 }
 
 header {
-	background-color: #ccc;
+	background-color: $dark-gray;
+	color: #fff;
 	.content {
 		h1 { margin: 0; float: left; }
 		.send-test {
-			margin-top: 5px;
+			margin-top: 6px;
+			@include corners(5px);
+			cursor: pointer;
+			background-color: $blue;
+			border: #fff;
+			color: #fff;
 		}
 		@extend .clearfix;
 	}

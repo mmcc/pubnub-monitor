@@ -1,7 +1,7 @@
 %header
 	.content-wrap
 		.content
-			%h1 Monitor #{@channel}
+			%h1 Monitor: #{@channel}
 
 			.right
 				%button{:class => "send-test"} Send Test Message
@@ -12,10 +12,6 @@
 
 	%h2 History
 	%ul#pn-messages.history
-
-%footer
-	.content-wrap
-		%p PubNub Monitor
 
 <div pub-key="#{@publish}" sub-key="#{@subscribe}" ssl="off" origin="pubsub.pubnub.com" id="pubnub"></div>
 %script{ :src => "http://cdn.pubnub.com/pubnub-3.1.min.js" }
