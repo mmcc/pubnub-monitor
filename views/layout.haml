@@ -11,7 +11,12 @@
 		%script{:type => "text/javascript", :src => "/js/jquery-1.8.0.js"}
 
 	%body
-		= yield
+		- if !@channel
+			.content-wrap
+				%h1 No channel selected to monitor...
+				%p To monitor a specific channel, include it in the URI. For example: <a href="#{request.url}my-awesome-channel">#{request.url}my-awesome-channel</a>
+		- else
+			= yield
 
 		%footer
 			.content-wrap

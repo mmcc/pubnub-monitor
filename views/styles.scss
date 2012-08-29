@@ -1,6 +1,11 @@
 // Variables
 $blue: #00adef;
 $dark-gray: #333;
+// These variables are mostly for syntax highlighting
+$purple: #bf00ef;
+$red: #ef0017;
+$orange: #ef8d00;
+$green: #21d303;
 
 // Mixins and some utilities (like clearfix)
 // Rounded Corners
@@ -58,11 +63,12 @@ header {
 	li {
 		pre {
 			outline: 1px solid #ccc; padding: 5px; margin: 5px;
-			.string { color: green; }
-			.number { color: darkorange; }
-			.boolean { color: blue; }
-			.null { color: magenta; }
-			.key { color: red; }
+			background-color: #e7e7e7;
+			.string { color: $blue; }
+			.number { color: $orange; }
+			.boolean { color: $green; }
+			.null { color: $red; }
+			.key { color: $purple; }
 		}
 	}
 }
